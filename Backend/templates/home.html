@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brain Tumor Detection - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body{
+            height:100vh;
+            background:#0b0f1a;
+            color:white;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar{
+            position:absolute;
+            top:20px;
+            right:50px;
+            z-index: 100;
+        }
+
+        .navbar a{
+            color:white;
+            text-decoration:none;
+            margin-left:30px;
+            font-size:18px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar a:hover{
+            color:#00e6ff;
+        }
+
+        .navbar a:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #00e6ff;
+        }
+
+        /* Main layout */
+        .container{
+            height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 8%;
+            position: relative;
+        }
+
+        /* Left content */
+        .content{
+            max-width:600px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .content h1{
+            font-size:70px;
+            color:#00e6ff;
+            text-shadow: 0 0 15px rgba(0,230,255,0.3);
+            margin-bottom: 10px;
+        }
+
+        .content h2{
+            font-size:34px;
+            margin:10px 0 20px;
+            font-weight:400;
+            color: #e0f7ff;
+        }
+
+        .content p{
+            font-size:18px;
+            line-height:30px;
+            color:#ddd;
+            margin-bottom:35px;
+        }
+
+        .btn{
+            padding:15px 35px;
+            font-size:18px;
+            background:#00e6ff;
+            color:black;
+            text-decoration:none;
+            border-radius:6px;
+            font-weight:600;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0,230,255,0.4);
+        }
+
+        .btn:hover{
+            background:#00c4e0;
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0,230,255,0.6);
+        }
+
+        /* Right image */
+        .image-box{
+            width: 550px;
+            height: 550px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .image-box img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius:12px;
+            box-shadow:0 0 25px rgba(0,230,255,0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Background elements */
+        .bg-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 230, 255, 0.05);
+        }
+
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            right: 15%;
+        }
+
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: 20%;
+            left: 10%;
+        }
+
+        /* Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 5%;
+            }
+            
+            .content h1 {
+                font-size: 60px;
+            }
+            
+            .image-box {
+                width: 450px;
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding-top: 100px;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .content {
+                max-width: 100%;
+                margin-bottom: 50px;
+            }
+            
+            .image-box {
+                width: 400px;
+                height: 400px;
+                margin: 0 auto;
+            }
+            
+            .navbar {
+                position: relative;
+                top: 0;
+                right: 0;
+                padding: 20px;
+                text-align: center;
+                background: rgba(11, 15, 26, 0.9);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content h1 {
+                font-size: 30px;
+            }
+            
+            .content h2 {
+                font-size: 24px;
+            }
+            
+            .content p {
+                font-size: 16px;
+            }
+            
+            .image-box {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a>
+        <a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+    </div>
+
+    <div class="bg-elements">
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <div class="container">
+
+        <!-- LEFT SIDE -->
+        <div class="content">
+            <h1>BRAIN TUMOR DETECTOR</h1>
+          
+
+            <p>
+                This system analyzes MRI brain scan images using a trained deep learning model
+                to detect the presence of tumors with high accuracy. Our advanced AI technology
+                helps medical professionals make faster and more accurate diagnoses.
+            </p>
+
+            <a href="{{ url_for('login') }}" class="btn">
+                <i class="fas fa-rocket"></i> Get Started
+            </a>
+        </div>
+
+        <!-- RIGHT SIDE IMAGE -->
+        <div class="image-box">
+            <!-- Fallback image in case Flask route doesn't work -->
+            <img src="{{ url_for('static', filename='brain1.jpeg') }}" 
+                 alt="Brain Image"
+                 onerror="this.onerror=null; this.src='https://favpng.com/png_view/brain-human-brain-neuron-cell-research-png/yuCqHKbi'">
+        </div>
+
+    </div>
+
+    <script>
+        // Fallback for image if Flask static file not found
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.querySelector('.image-box img');
+            img.addEventListener('error', function() {
+                console.log('Local image not found, using fallback image');
+                // Using a brain-related image from Unsplash as fallback
+                this.src = 'https://pngimg.com/uploads/brain/brain_PNG32.png';
+            });
+            
+            // Add some interactive effects
+            const links = document.querySelectorAll('.navbar a');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

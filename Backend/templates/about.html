@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About This Project | Brain Tumor Detection</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body {
+    
+    line-height:1.6;
+    position: relative;
+    overflow-x: hidden;
+    color: #fff;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+}
+
+/* Blurred Background */
+body::before {
+    content: "";
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: url("{{ url_for('static', filename='neuron1.jpg') }}") no-repeat center/cover;
+    filter: blur(12px);
+    z-index:0;
+}
+
+body > * { position: relative; z-index:10; }
+
+/* Navbar */
+nav {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    padding: 15px 50px;
+    display:flex; justify-content:space-between; align-items:center;
+    position: sticky; top:0; z-index:100;
+}
+nav h1 { color:#fff; font-weight:700; }
+nav ul { list-style:none; display:flex; gap:30px; }
+nav ul li a { color:#fff; font-weight:500; transition:0.3s; }
+nav ul li a:hover { color:#ffd700; }
+
+.container { max-width:1000px; margin:50px auto; padding:0 20px; }
+
+/* Section Titles */
+.section-title {
+    text-align:center;
+    margin-bottom:40px;
+    font-size:3em;
+    font-weight:800;
+    background: linear-gradient(90deg, #ffd700, #ff7a00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Glassmorphic Cards */
+.card {
+    background: rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:30px 35px;
+    margin-bottom:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+.card:hover { transform: translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,0.6); }
+.card img { width:80px; margin-bottom:15px; transition: transform 0.3s; }
+.card img:hover { transform: scale(1.2); }
+.card h2 { margin-bottom:15px; color:#ffd700; }
+.card ul { list-style-type: disc; padding-left:0; text-align:left; }
+.card ul li { margin-bottom:10px; line-height:1.5; }
+
+/* Workflow */
+.workflow {
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:15px; margin-top:20px;
+}
+.workflow-step {
+    flex:1;
+    margin: 5px;
+    border-radius:20px;
+    padding:20px;
+    background: linear-gradient(135deg, #ffd700, #ff7a00);
+    color:#1a1a1a;
+    font-weight:600;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.workflow-step:hover { transform: translateY(-5px); box-shadow:0 10px 20px rgba(0,0,0,0.4); }
+
+@media(max-width:768px) {
+    .workflow { flex-direction: column; }
+    .card ul { text-align:center; }
+}
+
+/* Floating Brains with Glow Trails */
+.floating-brain {
+    position: absolute;
+    width: 50px;
+    opacity: 0.15;
+    animation: float 20s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255,255,0,0.5));
+    z-index: 1;
+}
+@keyframes float {
+    0% { transform: translateY(100vh) rotate(0deg);}
+    100% { transform: translateY(-100px) rotate(360deg);}
+}
+
+/* Pulsing & Wave Neuron Particles */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255,215,0,0.7);
+    animation: pulseWave 4s ease-in-out infinite alternate;
+    z-index: 0;
+    box-shadow: 0 0 8px rgba(255,215,0,0.7);
+}
+@keyframes pulseWave {
+    0% { transform: translate(0,0) scale(0.5); opacity:0.3; }
+    25% { transform: translate(10px, -5px) scale(0.8); opacity:0.5; }
+    50% { transform: translate(-10px, 5px) scale(1.2); opacity:0.8; }
+    75% { transform: translate(5px, -10px) scale(0.9); opacity:0.6; }
+    100% { transform: translate(0,0) scale(1); opacity:0.5; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <h1>Brain Tumor Detection</h1>
+    <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+      
+    </ul>
+</nav>
+
+<!-- Floating Brains -->
+<img src="https://img.icons8.com/fluency/48/brain.png" class="floating-brain" style="left:10%; top:90%; animation-duration:28s;">
+<img src="https://img.icons8.com/fluency/48/brain.png" class="floating-brain" style="left:30%; top:95%; animation-duration:30s;">
+<img src="https://img.icons8.com/fluency/48/brain.png" class="floating-brain" style="left:50%; top:85%; animation-duration:26s;">
+<img src="https://img.icons8.com/fluency/48/brain.png" class="floating-brain" style="left:70%; top:92%; animation-duration:32s;">
+<img src="https://img.icons8.com/fluency/48/brain.png" class="floating-brain" style="left:85%; top:88%; animation-duration:29s;">
+
+<!-- Wave Neuron Particles -->
+<script>
+const numParticles = 60;
+for(let i=0;i<numParticles;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.top = Math.random()*100 + 'vh';
+    p.style.animationDuration = (2 + Math.random()*3) + 's';
+    document.body.appendChild(p);
+}
+</script>
+
+<div class="container">
+
+    <h2 class="section-title">About This Project</h2>
+
+    <div class="card">
+        <img src="https://img.icons8.com/fluency/96/brain.png" alt="Brain Icon">
+        <h2>Project Overview</h2>
+        <p>This system detects brain tumors using MRI images with high accuracy. 
+        It combines CNN and SVM for predictions. Users can upload MRI scans and get instant results.</p>
+    </div>
+
+    <div class="card">
+        <img src="https://img.icons8.com/fluency/96/code.png" alt="Tech Icon">
+        <h2>Technologies Used</h2>
+        <ul>
+            <li>Python</li>
+            <li>Flask</li>
+            <li>HTML, CSS, JavaScript</li>
+            <li>CNN (Convolutional Neural Network)</li>
+            <li>SVM (Support Vector Machine)</li>
+            <li>SQLite</li>
+            <li>MRI Dataset</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <img src="https://img.icons8.com/fluency/96/goal.png" alt="Objectives Icon">
+        <h2>Objectives of the Project</h2>
+        <ul>
+            <li>Provide accurate brain tumor detection using MRI scans.</li>
+            <li>Help doctors make faster diagnosis decisions.</li>
+            <li>Enable a user-friendly interface for patients and medical staff.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <img src="https://img.icons8.com/fluency/96/task.png" alt="Features Icon">
+        <h2>Features of the System</h2>
+        <ul>
+            <li>Secure login system for users.</li>
+            <li>Upload MRI images for analysis.</li>
+            <li>Automatic tumor detection and prediction.</li>
+            <li>View results instantly with clear classification.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <img src="https://img.icons8.com/fluency/96/process.png" alt="Workflow Icon">
+        <h2>How It Works</h2>
+        <div class="workflow">
+            <div class="workflow-step">Login</div>
+            <div class="workflow-step">Upload MRI</div>
+            <div class="workflow-step">Model Prediction</div>
+            <div class="workflow-step">Result</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="https://img.icons8.com/fluency/96/future.png" alt="Future Icon">
+        <h2>Future Scope</h2>
+        <ul>
+            <li>Integrate advanced deep learning models for higher accuracy.</li>
+            <li>Support multiple tumor types and stages detection.</li>
+            <li>Include real-time MRI analysis for hospitals.</li>
+            <li>Develop a mobile app version for remote access.</li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

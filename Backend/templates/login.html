@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | Brain Tumor Detection</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    /* ---- Floating animation for WHITE LOGIN BOX ---- */
+    @keyframes floatGlow {
+        0% {
+            transform: translateY(0px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+        50% {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(30,136,229,0.35);
+        }
+        100% {
+            transform: translateY(0px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+            linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+            url("{{ url_for('static', filename='login.png') }}") no-repeat center/cover;
+        filter: blur(8px);
+        transform: scale(1.1);
+        z-index: -1;
+    }
+
+    .box {
+        width: 350px;
+        margin: 120px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 1;
+
+        /* 🔥 Animation added here */
+        animation: floatGlow 5s ease-in-out infinite;
+    }
+
+    input, button {
+        width: 90%;
+        padding: 12px;
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #753a88;
+    }
+
+    button {
+        background: #753a88;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+    button:hover {
+        background: #5e2d6f;
+    }
+
+    a {
+        display: block;
+        margin-top: 15px;
+        text-decoration: none;
+        color: #753a88;
+        font-size: 14px;
+    }
+    /* ---- Make Login button blue ---- */
+button {
+    background: #1e88e5 !important;
+}
+p, a {
+    display: inline;
+}
+
+p {
+    margin-right: 6px;
+}
+
+button:hover {
+    background: #1565c0 !important;
+}
+
+/* ---- Make "New user? Signup here" blue ---- */
+a {
+    color: #1e88e5 !important;
+    font-weight: 500;
+}
+
+a:hover {
+    color: #1565c0 !important;
+}
+
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body>
+    <div class="box">
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            <h2>User Login</h2>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  <p style="color:green;">{{ message }}</p>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('login') }}" method="POST" autocomplete="off">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+
+            <p>New User? <a href="#" onclick="showSignup()">Signup</a></p>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="signupForm" style="display:none;">
+            <h2>Create Account</h2>
+
+            <form action="{{ url_for('signup') }}" method="POST">
+                <input type="text" name="username" placeholder="Enter Username" required>
+                <input type="password" name="password" placeholder="Enter Password" required>
+                <button type="submit">Signup</button>
+            </form>
+
+            <p>Already have account? <a href="#" onclick="showLogin()">Login</a></p>
+        </div>
+
+    </div>
+
+    <script>
+    function showSignup(){
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("signupForm").style.display = "block";
+    }
+
+    function showLogin(){
+        document.getElementById("signupForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+    }
+    </script>
+</body>
+
+</html>

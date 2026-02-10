@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+        body{background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c92d2);color:#fff;min-height:100vh;padding:20px;}
+        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding:20px;background:rgba(0,0,0,0.3);border-radius:15px;}
+        .container{max-width:1200px;margin:0 auto;}
+        table{width:100%;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;}
+        th,td{padding:15px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.1);}
+        th{background:rgba(0,0,0,0.3);}
+        .btn-back{margin-top:20px;padding:10px 20px;background:#00c6ff;color:white;border:none;border-radius:5px;cursor:pointer;}
+        .badge{padding:5px 10px;border-radius:20px;font-size:12px;}
+        .badge-tumor{background:#dc3545;}
+        .badge-clean{background:#28a745;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2><i class="fas fa-history"></i> Patient History</h2>
+            <a href="{{ url_for('upload') }}" style="color:#fff;text-decoration:none;">
+                <i class="fas fa-arrow-left"></i> Back to Upload
+            </a>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Name</th>
+                    <th>Age/Gender</th>
+                    <th>Prediction</th>
+                    <th>Confidence</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in history %}
+                <tr>
+                    <td>{{ record.patient_id }}</td>
+                    <td>{{ record.patient_name }}</td>
+                    <td>{{ record.age }}/{{ record.gender }}</td>
+                    <td>
+                        <span class="badge {% if 'no tumor' in record.prediction.lower() %}badge-clean{% else %}badge-tumor{% endif %}">
+                            {{ record.prediction }}
+                        </span>
+                    </td>
+                    <td>{{ record.confidence }}%</td>
+                    <td>{{ record.scan_date }}</td>
+                    <td>
+                        <a href="{{ url_for('delete_history', id=record.id) }}" 
+                           onclick="return confirm('Delete this record?')"
+                           style="color:#ff6b6b;">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <a href="{{ url_for('upload') }}">
+            <button class="btn-back">
+                <i class="fas fa-brain"></i> New Prediction
+            </button>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brain Tumor Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+        body{min-height:100vh;background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c92d2);background-size: 400% 400%;animation: gradientMove 12s ease infinite;color:#fff;}
+        @keyframes gradientMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+        .header{padding:18px 50px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.3);}
+        .main{max-width:1400px;margin:30px auto;display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:0 20px;}
+        .card{background: rgba(255,255,255,0.08);backdrop-filter: blur(20px);border-radius: 25px;padding: 30px;box-shadow: 0 20px 60px rgba(0,0,0,0.6);transition: 0.4s;}
+        .card:hover{transform: translateY(-8px);box-shadow: 0 30px 80px rgba(0,0,0,0.8);}
+        .result-box{background:#fff;color:#333;padding:25px;border-radius:15px;margin-top:20px;}
+        .badge{display:inline-block;padding:10px 20px;border-radius:25px;margin:10px 0;font-weight:600;font-size:15px;animation:pulseBadge 2s infinite;}
+        .badge.glioma{background:#6f42c1;color:#fff;}
+        .badge.meningioma{background:#fd7e14;color:#fff;}
+        .badge.pituitary{background:#20c997;color:#fff;}
+        .badge.notumor{background:#28a745;color:#fff;}
+        .preview img{width:100%;max-height:260px;object-fit:contain;border-radius:12px;border:3px solid #fff;margin-top:15px;}
+        .header h2{font-size:26px;letter-spacing:1px;text-shadow:0 0 20px #00e0ff;}
+        button{padding:14px 25px;margin-top:15px;border:none;border-radius:10px;background: linear-gradient(90deg,#00c6ff,#0072ff);color:white;font-size:16px;box-shadow: 0 0 20px #00c6ff;transition:0.3s;cursor:pointer;}
+        button:hover{transform:scale(1.05);box-shadow:0 0 35px #00e0ff;}
+        .patient-form{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px;}
+        .form-group{margin-bottom:15px;}
+        .form-group label{display:block;margin-bottom:5px;font-weight:600;}
+        .form-group input, .form-group select{width:100%;padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.1);color:#fff;}
+        .form-group input::placeholder{color:#aaa;}
+        .btn-container{display:flex;gap:10px;margin-top:20px;}
+        .btn-predict{background:linear-gradient(90deg,#00c6ff,#0072ff);}
+        .btn-report{background:linear-gradient(90deg,#28a745,#20c997);}
+        @keyframes pulseBadge{0%{box-shadow:0 0 0 0 rgba(255,255,255,0.6);}70%{box-shadow:0 0 0 12px rgba(255,255,255,0);}100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}}
+        @keyframes zoomFade{from{transform:scale(0.7);opacity:0;}to{transform:scale(1);opacity:1;}}
+        .hidden{display:none;}
+        .tumor-info{background:rgba(255,255,255,0.1);padding:15px;border-radius:10px;margin-top:15px;}
+        .tumor-info h4{margin-bottom:10px;color:#00e0ff;}
+        .tumor-info p{margin-bottom:8px;}
+        .error-message{color:#ff6b6b;padding:10px;background:rgba(255,0,0,0.1);border-radius:8px;margin-top:10px;}
+        .success-message{color:#28a745;padding:10px;background:rgba(40,167,69,0.1);border-radius:8px;margin-top:10px;}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2><i class="fas fa-brain"></i> Brain Tumor Detection System</h2>
+        <a href="{{ url_for('logout') }}" style="color:#fff;text-decoration:none;">
+            <i class="fas fa-sign-out-alt"></i> Logout ({{ session.get('username', 'User') }})
+        </a>
+    </div>
+
+    <div class="main">
+        <!-- Left Card: Patient Info & Upload -->
+        <div class="card">
+            <h2><i class="fas fa-user-circle"></i> Patient Information & MRI Upload</h2>
+            <form id="uploadForm" method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+                <div class="patient-form">
+                    <div class="form-group">
+                        <label>Patient Name *</label>
+                        <input type="text" name="name" placeholder="Enter full name" required 
+                               value="{{ result.name if result else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Patient ID *</label>
+                        <input type="text" name="patient_id" placeholder="P-001" required
+                               value="{{ result.patient_id if result else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Age *</label>
+                        <input type="number" name="age" min="1" max="120" placeholder="Age" required
+                               value="{{ result.age if result else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender *</label>
+                        <select name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male" {% if result and result.gender=='Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if result and result.gender=='Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if result and result.gender=='Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload MRI Image (JPG/PNG) *</label>
+                    <input type="file" name="file" id="fileInput" accept=".jpg,.jpeg,.png" required>
+                </div>
+                
+                <div class="preview" id="previewBox">
+                    {% if result %}
+                        <img src="{{ url_for('static', filename=result.filename) }}" id="mriImage">
+                    {% else %}
+                        <p style="text-align:center;padding:50px 0;">Image preview will appear here</p>
+                    {% endif %}
+                </div>
+                
+                <div class="btn-container">
+                    <button type="submit" class="btn-predict">
+                        <i class="fas fa-brain"></i> Predict Tumor
+                    </button>
+                    
+                    {% if result %}
+                    <button type="button" id="downloadReportBtn" class="btn-report">
+                        <i class="fas fa-file-pdf"></i> Download Hospital Report
+                    </button>
+                    {% endif %}
+                </div>
+                
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="error-message">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </form>
+        </div>
+
+        <!-- Right Card: Results Display -->
+        <div class="card">
+            <h2><i class="fas fa-chart-line"></i> AI Prediction Result</h2>
+            
+            {% if result %}
+                {% set clean_prediction = result.prediction.lower().replace('tumor detected:','').replace('tumor:','').strip() %}
+                <div class="result-box">
+                    <h3>Detection Status</h3>
+                    {% if clean_prediction == "no tumor" or clean_prediction == "notumor" %}
+                        <span class="badge notumor">No Tumor Detected</span>
+                    {% elif "glioma" in clean_prediction %}
+                        <span class="badge glioma">Glioma Tumor Detected</span>
+                    {% elif "meningioma" in clean_prediction %}
+                        <span class="badge meningioma">Meningioma Tumor Detected</span>
+                    {% elif "pituitary" in clean_prediction %}
+                        <span class="badge pituitary">Pituitary Tumor Detected</span>
+                    {% else %}
+                        <span class="badge">Tumor Detected</span>
+                    {% endif %}
+                    
+                    <div style="margin:15px 0;">
+                        <p><strong>Confidence Level:</strong> {{ result.confidence }}%</p>
+                        <p><strong>Patient:</strong> {{ result.name }}, {{ result.age }} years</p>
+                        <p><strong>Patient ID:</strong> {{ result.patient_id }}</p>
+                        <p><strong>Gender:</strong> {{ result.gender }}</p>
+                    </div>
+                    
+                    <!-- Tumor Information -->
+                    <div class="tumor-info">
+                        <h4>Medical Information</h4>
+                        {% if "glioma" in clean_prediction %}
+                            <p><strong>Description:</strong> Glioma develops from glial cells in the brain or spine.</p>
+                            <p><strong>Common Symptoms:</strong> Headaches, seizures, nausea, memory loss</p>
+                            <p><strong>Recommended Action:</strong> Immediate neurological consultation, possible surgery</p>
+                        {% elif "meningioma" in clean_prediction %}
+                            <p><strong>Description:</strong> Meningioma arises from the meninges (protective layers of the brain).</p>
+                            <p><strong>Common Symptoms:</strong> Vision problems, hearing loss, headaches</p>
+                            <p><strong>Recommended Action:</strong> Neurosurgeon consultation, regular monitoring</p>
+                        {% elif "pituitary" in clean_prediction %}
+                            <p><strong>Description:</strong> Pituitary tumor affects hormone production.</p>
+                            <p><strong>Common Symptoms:</strong> Fatigue, vision issues, hormonal imbalances</p>
+                            <p><strong>Recommended Action:</strong> Endocrinologist consultation, hormone therapy</p>
+                        {% else %}
+                            <p><strong>Status:</strong> No tumor detected in the MRI scan</p>
+                            <p><strong>Recommendation:</strong> Regular annual checkups recommended</p>
+                        {% endif %}
+                    </div>
+                    
+                   
+                </div>
+            {% else %}
+                <div class="result-box" style="text-align:center;padding:40px 20px;">
+                    <i class="fas fa-microscope" style="font-size:48px;color:#00c6ff;margin-bottom:15px;"></i>
+                    <h3>No Prediction Yet</h3>
+                    <p>Upload an MRI image and click "Predict Tumor" to see results here</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Hidden Form for PDF Download -->
+    <form id="pdfForm" method="POST" action="{{ url_for('download_report') }}" style="display:none;">
+        {% if result %}
+            <input type="hidden" name="name" value="{{ result.name }}">
+            <input type="hidden" name="age" value="{{ result.age }}">
+            <input type="hidden" name="gender" value="{{ result.gender }}">
+            <input type="hidden" name="patient_id" value="{{ result.patient_id }}">
+            <input type="hidden" name="filename" value="{{ result.filename }}">
+            <input type="hidden" name="prediction" value="{{ result.prediction }}">
+            <input type="hidden" name="confidence" value="{{ result.confidence }}">
+        {% endif %}
+    </form>
+
+    <script>
+        // Image Preview
+        const fileInput = document.getElementById("fileInput");
+        const previewBox = document.getElementById("previewBox");
+        
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewBox.innerHTML = `<img src="${e.target.result}" id="mriImage">`;
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        // PDF Download Button
+        const downloadBtn = document.getElementById("downloadReportBtn");
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', function() {
+                document.getElementById("pdfForm").submit();
+            });
+        }
+        
+        // Auto-fill date
+        window.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.querySelector('input[name="date"]');
+            if (dateInput && !dateInput.value) {
+                const now = new Date();
+                dateInput.value = now.toISOString().split('T')[0];
+            }
+        });
+    </script>
+</body>
+</html>

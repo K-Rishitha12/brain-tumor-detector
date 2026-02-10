@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup - Brain Tumor Detection</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .box{
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+        input{
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button{
+            padding: 10px 20px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        a{
+            text-decoration: none;
+            color: #2a5298;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Create Account</h2>
+
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <form action="/signup" method="POST">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Signup</button>
+    </form>
+
+    <p>Already have account?<a href="{{ url_for('login') }}">Login</a></p>
+</div>
+
+</body>
+</html>

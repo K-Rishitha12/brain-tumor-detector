@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tumor Prediction Result</title>
+    <style>
+        body{
+            font-family: Arial;
+            display:flex;
+            justify-content: space-between;
+            padding:40px;
+        }
+        .left{
+            width:45%;
+        }
+        .right{
+            width:45%;
+            border-left:2px solid #ccc;
+            padding-left:40px;
+        }
+        img{
+            width:100%;
+            border-radius:10px;
+        }
+        .result-box{
+            background:#f5f5f5;
+            padding:20px;
+            border-radius:10px;
+            margin-top:20px;
+        }
+        button{
+            padding:12px 20px;
+            margin-top:20px;
+            background:#2ecc71;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="left">
+    <h2>Uploaded MRI Image</h2>
+    <img src="{{ image_path }}">
+</div>
+
+<div class="right">
+    <h2>Prediction Result</h2>
+
+    <div class="result-box">
+        <p><b>Patient Name:</b> {{ patient_name }}</p>
+        <p><b>Patient Age:</b> {{ patient_age }}</p>
+        <p><b>Tumor Status:</b> {{ result }}</p>
+        <p><b>Confidence:</b> {{ confidence }}%</p>
+    </div>
+
+    <a href="/download_report">
+        <button>Download Hospital Report</button>
+    </a>
+</div>
+
+</body>
+</html>
