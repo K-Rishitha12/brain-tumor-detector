@@ -1,8 +1,8 @@
 streamlit
-tensorflow
 numpy
-opencv-python
+pandas
+opencv-python-headless
+Pillow
+tensorflow
 scikit-learn
-pillow
-Flask
-
+joblib
