@@ -6,7 +6,7 @@ from cnn_svm import predict_tumor
 from fpdf import FPDF
 from datetime import datetime
 import json
-import steamlit as st
+import streamlit as st
 st.title("Brain Tumor Detector")
 
 # ---------------- Flask App Setup ----------------
